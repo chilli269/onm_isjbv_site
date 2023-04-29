@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_school_db">
+        <field name="name">view_school_db</field>
+        <field name="model">school.db</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="id" invisible="1"/>
+                <field name="name"/>
+                <field name="city"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_school_db_form">
+        <field name="name">view_school_db_form</field>
+        <field name="model">school.db</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                        <field name="id" invisible="1"/>
+                        <field name="name"/>
+                        <field name="city"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_school_db">
+        <field name="name">Schools Model</field>
+        <field name="res_model">school.db</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="main_menu_school_db"
+              name="Schools Model"
+              sequence="99"/>
+
+        <menuitem id="menu_school_db"
+                  name="Schools List"
+                  parent="main_menu_school_db"
+                  sequence="0"/>
+
+            <menuitem id="menu_school_db_inner"
+                      name="Schools List"
+                      parent="menu_school_db"
+                      action="action_school_db"
+                      sequence="0"/>
+</odoo>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_my_to_do">
+        <field name="name">view_my_to_do</field>
+        <field name="model">my.todo</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="id" invisible="1"/>
+                <field name="name"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_my_to_do_form">
+        <field name="name">view_my_to_do_form</field>
+        <field name="model">my.todo</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="id"/>
+                    </group>
+                    <group>
+                        <field name="name"/>
+                        <field name="state"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_my_to_do">
+        <field name="name">ToDo</field>
+        <field name="res_model">my.todo</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="main_menu_my_to_do"
+              name="ToDoShka"
+              sequence="99"/>
+
+        <menuitem id="menu_my_to_do"
+                  name="ToDo list"
+                  parent="main_menu_my_to_do"
+                  sequence="0"/>
+
+            <menuitem id="menu_my_to_do_iiner"
+                      name="ToDo list"
+                      parent="menu_my_to_do"
+                      action="action_my_to_do"
+                      sequence="0"/>
+</odoo>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="testing2_extending_list">
+        <field name="name">testing2_extending_list</field>
+        <field name="inherit_id" ref="testing2.view_testing2_module_list" />
+        <field name="model">testing2_module</field>
+        <field name="arch" type="xml">
+            <xpath expr="//tree//field[@name='address']" position="after">
+                <field name="price"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="testing2_extending_form">
+        <field name="name">testing2_extending_form</field>
+        <field name="inherit_id" ref="testing2.view_testing2_module_form" />
+        <field name="model">testing2_module</field>
+        <field name="arch" type="xml">
+            <xpath expr="//form//h1//field[@name='name']" position="after">
+                <br/>
+                <field name="owner_full_name"/>
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="testing2_extending_form">
+        <field name="name">testing2_extending_form</field>
+        <field name="inherit_id" ref="testing2.view_testing2_module_form" />
+        <field name="model">testing2_module</field>
+        <field name="arch" type="xml">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/testing2_extension/static/src/css/style.css"/>
+            </xpath>
+            <xpath expr="//form//h1" position="replace">
+                <h1 class="mama">
+                    <field name="name"/>
+                </h1>
+            </xpath>
+        </field>
+    </record>
+    <!-- <template id="footer_extension" inherit_id="testing2.first_template">
+        <xpath expr="//t/div/div/h4[@id='haha']" position="replace">
+            <h4>Bau!</h4>
+        </xpath>
+    </template> -->
+</odoo>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_testing2_module_list">
+        <field name="name">view_testing2_module_list</field>
+        <field name="model">testing2_module</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="address"/>
+                <field name="size_output"/>
+                <field name="owner_full_name"/>
+                <field name="total_price"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_testing2_module_form" model="ir.ui.view">
+        <field name="name">view_testing2_module_form</field>
+        <field name="model">testing2_module</field>
+        <field name="arch" type="xml">
+            <form>
+                <h1>
+                    <field name="name"/>
+                </h1>
+                <div class="oe_button_box" name="button_box" >
+                    <button class="oe_stat_button" icon="fa-paperclip icon" type="object" name="property_info">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">More Property Info</span>
+                        </div>
+                    </button>
+                    <button class="oe_stat_button" icon="fa-user icon" type="object" name="owner_info">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_text">Owner Info</span>
+                        </div>
+                    </button>
+                </div>
+                <separator/>
+                <header>
+                    <button name="house_sold" type="object" string="House Sold"/>
+                    <button name="house_on_market" type="object" string="House On Market"/>
+                    <button name="house_not_on_market" type="object" string="House Not On Market"/>
+                </header>
+                <div>
+                    <separator/>
+                    <span class="o_stat_text">Total Number of Records: </span>
+                    <field name="number_of_records"/>
+                </div>
+                
+                <group col='4'>
+                    <field name="name"/>
+                    <field name="address"/>
+                    <field name="price"/>
+                    <field name="owner_name_id"/>
+                </group>
+                <separator/>
+                <separator/>
+                <notebook>
+                    <page string="Size, Owner's name and total price">
+                        <separator string="The size of the house in squared meters:"/>
+                        <field name="size"/>                        
+                        <separator string="The price of the house:"/>
+                        <field name="total_price"/>
+                    </page>
+                    <page string="State">
+                        <separator string="Choose the state of the house:"/>
+                        <field name="state"/>
+                        <separator string="Enter the link of the property!"/>
+                        <field name="link"/>
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+
+    
+    <record id="view_testing2_module_search" model="ir.ui.view">
+        <field name="name">view_testing2_module_search</field>
+        <field name="model">testing2_module</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="address"/>
+                <field name="size_output"/>
+                <field name="owner_full_name"/>
+                <field name="total_price"/>
+                <field name="total_price"/>
+                <field name="state"/>
+            </search>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_testing2_module">
+        <field name="name">Testing2</field>
+        <field name="res_model">testing2_module</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    
+    <menuitem id="main_menu_testing2_module"
+              name="Testing2 Module"
+              sequence="99"
+              web_icon="testing2, static/description/icon.png"/>
+
+        <menuitem id="menu_testing2_module"
+                  name="Testing2"
+                  parent="main_menu_testing2_module"
+                  sequence="0"/>
+
+            <menuitem id="menu_testing2_module_inner"
+                      name="Testing2 List"
+                      parent="menu_testing2_module"
+                      action="action_testing2_module"
+                      sequence="0"/>
+
+                <menuitem id="menu_testing_module"
+                            name="Testing"
+                            parent="main_menu_testing2_module"
+                            sequence="0"/>
+
+                    <menuitem id="menu_testing_module_inner"
+                                name="Testing List"
+                                parent="menu_testing_module"
+                                action="testing.action_testing_module"
+                                sequence="0"/>
+    
+</odoo>

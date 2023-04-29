@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="footer_thanks">
+            <h4 id="haha">This is it!!</h4>
+            <h4 id="thanks">Thank you for your attention!!</h4>
+        </template>
+        <template id="first_template">
+            <t t-call="website.layout">
+                <t t-set="Title">House List</t>
+                <div class="oe_structure">
+                    <div class="container">
+                        <h1 class="iringo_c">Welcome to the House List and their owners</h1>
+                        <ul>
+                        <t t-foreach='houses' t-as='house'>
+                            <t t-if="house.name!='SUPER'">
+                                <li class="list"><a t-attf-href="/testing2/{{ slug(house)}}/house-info"><t t-esc='house.name'/></a> owned by 
+                                    <a t-attf-href="/testing2/{{ slug(house)}}/owner-info"><t t-esc="house.owner_full_name"/></a>
+                                </li>
+                            </t>
+                        </t>
+                        </ul>
+                        <t t-call="testing2.footer_thanks"/>
+                    </div>
+                </div>
+            </t>
+        </template>
+        <template id="second_template">
+            <t t-call="website.layout">
+                <t t-set="Title">House List</t>
+                <div class="oe_structure">
+                    <div class="container">
+                        <h1>This is:</h1>
+                        <h2><t t-esc='hn.name'/></h2>
+                        <h5>The price for this house: <t t-esc='hn.total_price'/></h5>
+                        <h4>This is it!!</h4>
+                        <h4>Thank you for your attention!!</h4>
+                        <h6>IRINGO CORA</h6>
+                    </div>
+                </div>
+            </t>
+        </template>
+        <template id="third_template">
+            <t t-call="website.layout">
+                <t t-set="Title">House List</t>
+                <div class="oe_structure">
+                    <div class="container">
+                        <h1>This is:</h1>
+                        <h2><t t-esc='hn.owner_full_name'/></h2>
+                        <h5>Age: <t t-esc='hn.age'/></h5>
+                        <h4>This is it!!</h4>
+                        <h4>Thank you for your attention!!</h4>
+                        <h6>IRINGO CORA</h6>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>
