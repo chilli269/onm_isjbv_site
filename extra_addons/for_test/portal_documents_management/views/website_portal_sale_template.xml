@@ -1,0 +1,169 @@
+<odoo>
+
+    <template id="portal_my_home_menu_documents" name="Portal layout : documents menu entries" inherit_id="portal.portal_breadcrumbs" priority="10">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'document'" class="breadcrumb-item active}">
+                <a href="/my/documents">Documents</a>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_documents" name="Portal My Home : documents entries" inherit_id="portal.portal_my_home" priority="10">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Documents</t>
+                <t t-set="url" t-value="'/my/documents'"/>
+                <t t-set="count" t-value="documents_count"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="website_portal_my_documents" name="My Documents">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Your Documents</t>
+            </t>
+            <div class="container">
+                <div id="exTab2" class="order-table-wrapper">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a role="tab" aria-controls="personal" href="#personal" class="nav-link active" data-toggle="tab"> Personal Documents</a>
+                        </li>
+                        <li class="nav-item">
+                            <a role="tab" aria-controls="shared" href="#shared" class="nav-link" data-toggle="tab"> Shared Documents</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content mt16">
+                        <div role="tabpanel" class="tab-pane active" id="personal">
+                            <t t-if="not documents">
+                                <p>There are currently no personal documents for your account.</p>
+                            </t>
+                            <t t-if="documents">
+                                <style>
+                                    table.order-table tr th{
+                                        width: auto !important;
+                                    }
+                                    table.order-table td {
+                                        vertical-align: inherit;
+                                    }
+                                </style>
+                                <table class="table order-table table-striped table-hover o_my_status_table col-md-12" width="100%">
+                                    <thead>
+                                        <tr class="active">
+                                            <th>Datas</th>
+                                            <th>Description</th>
+                                            <th>Mime Type</th>
+                                            <th>Create Date</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <t t-foreach="documents" t-as="document">
+                                        <t t-set="file_URL" t-value="base_url + '/web/content/' + str(document.id)"/>
+                                        <tr>
+                                            <td class="cell_overflow">
+                                                <span t-field="document.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="document.description"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="document.mimetype"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="document.create_date"/>
+                                            </td>
+                                            <td>
+                                                <a target="new"
+                                                    t-att-href="file_URL + '?download=true'"
+                                                    class="pull-right" title="Download">
+                                                    <i class="fa fa-download fa-2x" role="img" aria-label="Download"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </table>
+                                <div t-if="pager" class="o_portal_pager text-center">
+                                    <t t-call="website.pager"/>
+                                </div>
+                            </t>
+                            <div class="form-group field-legal_business_name row">
+                                <form action="/upload/docs" method="post" enctype="multipart/form-data">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <input type="hidden" name="filter_docs" value="documents"/>
+                                    <label class="control-label col-md-12 text-left">
+                                        Upload Documents
+                                    </label>
+                                    <table class="table col-md-12">
+                                        <tr>
+                                            <td>
+                                                <input name="upload_docs" id="upload_docs" type="file" class="form-control"
+                                                       multiple="true" data-show-upload="true" data-show-caption="true"
+                                                       lass="file" data-show-preview="true" required="required"/>
+                                            </td>
+                                            <td>
+                                                <button id="btn_upload_docs" class="btn btn-primary">Upload</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="shared">
+                            <t t-if="not public_documents">
+                                <p>There are currently no public documents for your account.</p>
+                            </t>
+                            <t t-if="public_documents">
+                                <style>
+                                    table.order-table tr th{
+                                        width: auto !important;
+                                    }
+                                </style>
+                                <table class="table order-table table-striped table-hover o_my_status_table col-md-12" width="100%">
+                                    <thead>
+                                        <tr class="active">
+                                            <th>Datas</th>
+                                            <th>Description</th>
+                                            <th>Mime Type</th>
+                                            <th>Create Date</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <t t-foreach="public_documents" t-as="public_document">
+                                        <t t-set="file_URL" t-value="base_url + '/web/content/' + str(public_document.id)"/>
+                                        <tr>
+                                            <td class="cell_overflow">
+                                                <span t-field="public_document.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="public_document.description"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="public_document.mimetype"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="public_document.create_date"/>
+                                            </td>
+                                            <td>
+                                                <a target="new"
+                                                    t-att-href="file_URL + '?download=true'"
+                                                    class="pull-right" title="Download">
+                                                    <i class="fa fa-download fa-2x" role="img" aria-label="Download"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </table>
+                                <div t-if="pager" class="o_portal_pager text-center">
+                                    <t t-call="website.pager"/>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

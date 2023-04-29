@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ir_attachment_directory,ir_attachment_directory,model_ir_attachment_directory,base.group_user,1,1,1,1
+access_directory_tag,directory_tag,model_directory_tag,base.group_user,1,1,1,1
+access_document_tag,document_tag,model_document_tag,base.group_user,1,1,1,1
+access_ir_attachment_group_portal,ir_attachment group_portal_public,model_ir_attachment,,1,0,1,0

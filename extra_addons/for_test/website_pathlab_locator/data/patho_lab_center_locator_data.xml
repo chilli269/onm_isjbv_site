@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+<odoo>
+    <data noupdate="1">
+
+        <function
+                  model="ir.default" name="set"
+                  eval="('res.config.settings', 'map_center', 'auto')"
+                  />
+
+        <function
+                  model="ir.default" name="set"
+                  eval="('res.config.settings', 'map_zoom', 5)"
+                  />
+
+        <function
+                  model="ir.default" name="set"
+                  eval="('res.config.settings', 'map_type', 'roadmap')"
+                  />
+
+        <function
+                model="ir.default" name="set"
+                eval="('res.config.settings', 'search_radius', 5000)"
+                />
+        <function
+                  model="ir.default" name="set"
+                  eval="('res.config.settings', 'manually_option', 'address')"
+                  />
+
+        <!-- ~~~~~~~~~~ PATHO LAB CENTER FACILITY ~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+        <record id="patho_lab_center_facility1" model="patho.lab.facility">
+        	<field name="name">Wi-Fi</field>
+        	<field name="icon" type="base64" file="website_pathlab_locator/static/src/img/wifi.png"/>
+        </record>
+
+        <record id="patho_lab_center_facility2" model="patho.lab.facility">
+        	<field name="name">Car Parking</field>
+        	<field name="icon" type="base64" file="website_pathlab_locator/static/src/img/car_parking.png"/>
+        </record>
+
+        <record id="patho_lab_center_facility3" model="patho.lab.facility">
+        	<field name="name">Female Technician</field>
+        	<field name="icon" type="base64" file="website_pathlab_locator/static/src/img/female_tech.png"/>
+        </record>
+
+        <record id="patho_lab_center_facility4" model="patho.lab.facility">
+        	<field name="name">Power Backup</field>
+        	<field name="icon" type="base64" file="website_pathlab_locator/static/src/img/power_backup.png"/>
+        </record>
+
+        <record id="patho_lab_center_facility5" model="patho.lab.facility">
+        	<field name="name">Drinking Water</field>
+        	<field name="icon" type="base64" file="website_pathlab_locator/static/src/img/water.png"/>
+        </record>
+
+        <record id="patho_lab_center_facility6" model="patho.lab.facility">
+        	<field name="name">Wheel Chair</field>
+        	<field name="icon" type="base64" file="website_pathlab_locator/static/src/img/wheelchair.png"/>
+        </record>
+
+        <record id="patho_lab_center_facility7" model="patho.lab.facility">
+        	<field name="name">Washrooms</field>
+        	<field name="icon" type="base64" file="website_pathlab_locator/static/src/img/washroom.png"/>
+        </record>
+
+    </data>
+</odoo>

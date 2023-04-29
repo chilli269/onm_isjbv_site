@@ -1,0 +1,35 @@
+version: '3'
+services:
+  odoo:
+    image: odoo:15.0
+    restart: unless-stopped
+    depends_on:
+      - db
+    links:
+      - db
+    environment:
+      - PGHOST=db
+      - PGUSER=odoo
+      - PGPASSWORD=odoo
+    ports:
+      - "8125:8069"
+      - "8127:8071"
+    volumes:
+      - odoo15-classes-web-data:/var/lib/odoo
+      - ./config/local_odoo.conf:/etc/odoo/odoo.conf
+      - ./extra_addons:/mnt/extra-addons
+#      - ./odoo:/usr/lib/python3/dist-packages/odoo
+  db:
+    image: postgres:13
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+      - POSTGRES_DB=postgres
+    ports:
+      - "5491:5432"
+    volumes:
+       - odoo15-classes-db-data:/var/lib/postgresql/data
+volumes:
+    odoo15-classes-web-data:
+    odoo15-classes-db-data:

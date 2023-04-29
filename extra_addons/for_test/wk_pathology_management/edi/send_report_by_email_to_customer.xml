@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+
+<odoo>
+    <data noupdate="1">
+        <!--Mail to Report to customer on done -->
+        <record id="patho_send_report_by_email_to_customer" model="mail.template">
+            <field name="name">Send Report Mail to Customer On Done</field>
+            <field name="email_from">{{object.create_uid.company_id.partner_id.email or ''}}</field>
+            <field name="subject"> Lab Test Report from {{object.create_uid.company_id.name}}</field>
+            <field name="partner_to">{{object.customer_id.id}}</field>
+            <field name="model_id" ref="wk_pathology_management.model_patho_testrequest"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="report_template" ref="wk_pathology_management.patho_mgmt_patient_report"/>
+            <field name="report_name">{{(object.customer_id.name or '')}}</field>
+            <field name="lang">{{object.create_uid.company_id.partner_id.lang}}</field>
+            <field name="body_html" type="html">
+              <p>Dear <t t-out="object.customer_id.name or ''">Customer</t> , </p>
+                <br/>
+                <p>Your Report is been prepared and is attached within this email.</p>
+                <p>Kindly check the results.</p>
+                <br/>
+                <b>Date :</b> <t t-out="object.test_date or ''">Test Date</t>
+                <p>You can reply to this email if you have any questions.</p><br/>
+                <p>Thank you,</p>
+                <p>(<t t-out="object.create_uid.company_id.name or ''">Company</t>)</p>
+                <p style="color:#eeeeee;">
+                    <t t-if="object.create_uid.company_id.partner_id.user_ids and object.company_id.partner_id.user_ids[0].signature">
+                        <t t-out="object.create_uid.company_id.partner_id.user_ids[0].signature or ''">Signature</t>
+                    </t>
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

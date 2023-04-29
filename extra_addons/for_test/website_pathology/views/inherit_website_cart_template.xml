@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+<odoo>
+    <data>
+
+        <template id="cart_check_pathology_test_line_readonly_qty" inherit_id="website_sale.cart_lines" name="Shopping Cart Lines">
+            <xpath expr="//table[@id='cart_products']/thead/tr/th[hasclass('td-qty')]" position="replace">
+                <t t-set="flag" t-value="0"/>
+                <t t-foreach="website_sale_order.website_order_line" t-as="line">
+                    <t t-if="line.product_id.is_test or line.product_id.is_test_package">
+
+                    </t>
+                    <t t-else="">
+                        <t t-set="flag" t-value="1"/>
+                    </t>
+                </t>
+                <th t-if="flag==1" class="text-center td-qty">Quantity</th>
+                <th t-if="flag==0" class="text-center td-qty"></th>
+            </xpath>
+            <xpath expr="//td[hasclass('td-qty')]/div[hasclass('css_quantity','input-group','mx-auto')]//div[hasclass('input-group-prepend')]" position="attributes">
+                <attribute name="t-att-style">'display:none;' if line.product_id.is_test or line.product_id.is_test_package else ''</attribute>
+            </xpath>
+            <xpath expr="//td[hasclass('td-qty')]/div[hasclass('css_quantity','input-group','mx-auto')]//div[hasclass('input-group-append')]" position="attributes">
+                <attribute name="t-att-style">'display:none;' if line.product_id.is_test or line.product_id.is_test_package else ''</attribute>
+            </xpath>
+            <xpath expr="//td[hasclass('td-qty')]/div[hasclass('css_quantity','input-group','mx-auto')]//input[hasclass('quantity')]" position="attributes">
+                <attribute name="t-att-style">'display:none;' if line.product_id.is_test or line.product_id.is_test_package else ''</attribute>
+            </xpath>
+        </template>
+
+
+        <template id="website_pathology_inherit_cart_for_testreq_date" inherit_id="website_sale.cart" name="Shopping Cart">
+            <xpath expr="//t[@t-call='website_sale.cart_lines']" position="after">
+                <t t-set="website_sale_order" t-value="website.sale_get_order()" />
+                <t t-set="partner_id" t-value="website_sale_order.partner_id"/>
+                <t t-set="gender" t-value="request.session.get('gender') or partner_id.gender or False"/>
+                <t t-set="b_g" t-value="request.session.get('blood_group') or partner_id.blood_group or False"/>
+                <t t-set="dob" t-value="request.session.get('dob') or partner_id.patient_dob or False"/>
+                <t t-set="rh" t-value="request.session.get('rh_factor') or partner_id.rh_factor or False"/>
+                <t t-set="t_center" t-value="request.session.get('collect_center_id')"/>
+                <t t-set="comm" t-value="request.session.get('comment') or ''"/>
+                <t t-set="t_date" t-value="request.session.get('test_date')"/>
+                <t t-set="test_added_in_cart" t-value="website_sale_order.website_order_line.filtered(lambda p: p.product_id.is_test or p.product_id.is_test_package) if website_sale_order else request.env['sale.order.line']"/>
+                <div class="col-md-12 patho_loader" style="display:none;"/>
+                <div t-if="test_added_in_cart" class="mb32 row">
+                    <div class="form-group col-lg-12">
+                        <div class="row mt16 mb8">
+                            <div class='col-sm-6'>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="control-label" for="testreq_date"><strong>Select Date</strong></label>
+                                        <input class="form-control testreq_date" type="date" id="testreq_date" t-att-value="t_date" name="testreq_date" required="1" style="cursor:pointer;"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='col-sm-6'>
+                                <t t-set="collect_centers" t-value="request.env['patho.lab.centers'].search([('is_collection_center','=',True)])"/>
+                                <label class="control-label" for="collect_centers"><strong>Collection Center</strong></label><br/>
+                                <select class="form-control collect_centers" name="collect_centers" id="collect_centers" required="1" title="Select Lab Center" style="cursor:pointer;">
+                                    <option value="" t-att-selected="1 if not center else 0" disabled="1">--Select--</option>
+                                    <t t-foreach="collect_centers" t-as="center">
+                                        <option t-att-value="center.id" data-thumbnail="/web/static/src/img/placeholder.png" t-att-selected="1 if t_center and int(t_center)==center.id else 0">
+                                            <span t-esc="center.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                        </div>
+                         <div class="row mt16 mb8">
+                            <div class='col-sm-6'>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="control-label" for="testreq_gender"><strong>Patient Gender</strong></label>
+                                        <select class="form-control testreq_gender"  id="testreq_gender" name="testreq_gender" required="1" style="cursor:pointer;">
+                                            <option value="" t-att-selected="1 if not gender else 0" disabled="1">--Select--</option>
+                                            <option value="male" t-att-selected="1 if gender=='male' else 0">Male</option>
+                                            <option value="female" t-att-selected="1 if gender=='female' else 0">Female</option>
+                                            <option value="others" t-att-selected="1 if gender=='others' else 0">Others</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class='col-sm-6'>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="control-label" for="blood_group"><strong>Blood Group</strong></label>
+                                        <select class="form-control blood_group"  id="blood_group" name="blood_group" required="1" style="cursor:pointer;">
+                                            <option value="" t-att-selected="1 if not b_g else 0" disabled="1">--Select--</option>
+                                            <option value="a" t-att-selected="1 if b_g=='a' else 0" >A</option>
+                                            <option value="b" t-att-selected="1 if b_g=='b' else 0">B</option>
+                                            <option value="ab" t-att-selected="1 if b_g=='ab' else 0">AB</option>
+                                            <option value="o" t-att-selected="1 if b_g=='o' else 0">O</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt16 mb8">
+                            <div class='col-sm-6'>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="control-label" for="patho_dob"><strong>Patient D.O.B</strong></label>
+                                        <input class="form-control patho_dob" t-att-value="dob if dob  else ''" type="date" id="patho_dob" name="patho_dob" required="1" style="cursor:pointer;"/>
+                                    
+                                    </div>
+                                </div>
+                            </div>
+                             <div class='col-sm-6'>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="control-label" for="rh_factor"><strong>RH Factor</strong></label>
+                                        <select class="form-control rh_factor"  id="rh_factor" name="rh_factor" required="1" style="cursor:pointer;">
+                                            <option value="" t-att-selected="1 if not rh else 0" disabled="1">--Select--</option>                
+                                            <option value="negative" t-att-selected="1 if rh=='negative' else 0">Negative</option>
+                                            <option value="positive" t-att-selected="1 if rh=='positive' else 0">Positive</option>
+                                           
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb16 mt8">
+                            <div class='col-sm-12'>
+                                <div class="form-group">
+                                    <label class="control-label" for="comment"><strong> Additional Comment</strong></label><br/>
+                                    <textarea class="form-control" id="comment" placeholder="Write a comment..."><t t-esc="comm"/></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="pathology_inherit_continue_shopping" inherit_id="website_sale.cart" customize_show="True" name="Select More Test Button">
+            <xpath expr="//a[@href='/shop']" position="before">
+                <a href="/shop/test" class="btn btn-default mb32 p-0" role="button">
+                    <span class="btn btn-secondary d-none d-xl-inline-block"> <span class="fa fa-chevron-left" /> Select More Test</span>
+                </a>
+            </xpath>
+        </template>
+
+    <template id="website_pathology_inherit_payment" inherit_id="website_sale.payment" name="Patho Payment">
+        <xpath expr="//t//div[@id='wrap']//div[hasclass('oe_cart')]" position="inside">
+            <t t-set="flag" t-value="0"/>
+            <t t-foreach="website_sale_order.website_order_line" t-as="line">
+                <t t-if="line.product_id.is_test or line.product_id.is_test_package">
+                    <t t-set="flag" t-value="1"/>
+                </t>
+            </t>
+            <t t-if="flag==1">
+                <div class="alert alert-info mb8 mt32">
+                    <div class="text-center">
+                        <t t-set="test_date" t-value="request.session.get('test_date')"/>
+                        <t t-set="collec_center" t-value="request.env['patho.lab.centers'].browse(request.session.get('collect_center_id')).name"/>
+                        <t t-set="gender" t-value="request.session.get('gender')"/>
+                        <t t-set="b_g" t-value="request.session.get('blood_group')"/>
+                        <t t-set="dob" t-value="request.session.get('dob')"/>
+                        <t t-set="rh" t-value="request.session.get('rh_factor')"/>
+                        <div class="pull-right" title="Update Date/Center" style="font-size:16px;">
+                            <a href="/shop/cart"><i class="fa fa-edit" aria-hidden="false"></i></a>
+                        </div>
+                        Please complete the payment process to confirm your booking.
+                        <div style="font-weight:bold;font-size:15px;">
+                            Date: <t t-esc="test_date" t-options='{"widget": "date" , "format": "d MMM, y"}'/>
+                        </div>
+                        <div style="font-weight:bold;font-size:15px;">
+                            Center: <t t-esc="collec_center"/>
+                        </div>
+                        <div style="font-weight:bold;font-size:15px;">
+                            Patient:&#160;<t t-esc="request.website.sale_get_order().partner_id.name"/>&#160;(
+                            <span t-if="gender=='male'">Male</span>
+                            <span t-if="gender=='female'">Female</span>
+                            <span t-if="gender=='others'">Others</span>),
+                            D.O.B: 
+                            <t t-esc="dob" t-options='{"widget": "date" , "format": "d MMM, y"}'/>, 
+                            Blood Group: 
+                            <span t-if="b_g=='a'">A</span>
+                            <span t-if="b_g=='b'">B</span>
+                            <span t-if="b_g=='ab'">AB</span>
+                            <span t-if="b_g=='o'">O</span>                           
+                            <span t-if="rh=='negative'">(-)</span>
+                            <span t-if="rh=='positive'">(+)</span>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+
+    <template id="patho_inherit_checkout_for_test_date" inherit_id="website_sale.checkout">
+        <xpath expr="//div[@id='wrap']//div[hasclass('oe_cart')]" position="inside">
+            <t t-set="flag" t-value="0"/>
+            <t t-foreach="website_sale_order.website_order_line" t-as="line">
+                <t t-if="line.product_id.is_test or line.product_id.is_test_package">
+                    <t t-set="flag" t-value="1"/>
+                </t>
+            </t>
+            <t t-if="flag==1">
+                <div class="alert alert-info mb8 mt32">
+                    <div class="text-center">
+                        <t t-set="test_date" t-value="request.session.get('test_date')"/>
+                        <t t-set="collec_center" t-value="request.env['patho.lab.centers'].browse(request.session.get('collect_center_id')).name"/>
+                        <t t-set="gender" t-value="request.session.get('gender')"/>
+                        <t t-set="b_g" t-value="request.session.get('blood_group')"/>
+                        <t t-set="dob" t-value="request.session.get('dob')"/>
+                        <t t-set="rh" t-value="request.session.get('rh_factor')"/>
+                        <div class="pull-right" title="Update Date/Center" style="font-size:16px;">
+                            <a href="/shop/cart"><i class="fa fa-edit" aria-hidden="false"></i></a>
+                        </div>
+                        Please complete the payment process to confirm your booking.
+                        <div style="font-weight:bold;font-size:15px;">
+                            Date: <t t-esc="test_date" t-options='{"widget": "date" , "format": "d MMM, y"}'/>
+                        </div>
+                        <div style="font-weight:bold;font-size:15px;">
+                            Center: <t t-esc="collec_center"/>
+                        </div>
+                        <div style="font-weight:bold;font-size:15px;">
+                            Patient:&#160;<t t-esc="request.website.sale_get_order().partner_id.name"/>&#160;(
+                            <span t-if="gender=='male'">Male</span>
+                            <span t-if="gender=='female'">Female</span>
+                            <span t-if="gender=='others'">Others</span>),
+                            D.O.B: 
+                            <t t-esc="dob" t-options='{"widget": "date" , "format": "d MMM, y"}'/>, 
+                            Blood Group: 
+                            <span t-if="b_g=='a'">A</span>
+                            <span t-if="b_g=='b'">B</span>
+                            <span t-if="b_g=='ab'">AB</span>
+                            <span t-if="b_g=='o'">O</span>                           
+                            <span t-if="rh=='negative'">(-)</span>
+                            <span t-if="rh=='positive'">(+)</span>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="patho_inherit_confirmation_for_test_date" inherit_id="website_sale.confirmation">
+        <xpath expr="//div[@id='wrap']//div[hasclass('oe_cart')]" position="inside">
+            <t t-set="flag" t-value="0"/>
+            <t t-foreach="order.order_line" t-as="line">
+                <t t-if="line.product_id.is_test or line.product_id.is_test_package">
+                    <t t-set="flag" t-value="1"/>
+                </t>
+            </t>
+            <t t-if="flag==1">
+                <div class="alert alert-success mb8 mt8">
+                    <div class="text-center" style="font-size:18px;">
+                        <t t-set="test_date" t-value="order.test_date"/>
+                        <t t-set="collec_center" t-value="order.collection_center_id.name"/>
+                        <t t-set="gender" t-value="request.session.get('gender')"/>
+                        <t t-set="b_g" t-value="request.session.get('blood_group')"/>
+                        <t t-set="dob" t-value="request.session.get('dob')"/>
+                        <t t-set="rh" t-value="request.session.get('rh_factor')"/>
+                        Your request for test has been registered and is under process, once confirmed you will be notified.
+                        <div style="font-weight:bold;font-size:15px;">
+                            Date: <t t-esc="test_date" t-options='{"widget": "date" , "format": "d MMM, y"}'/>
+                        </div>
+                        <div style="font-weight:bold;font-size:15px;">
+                            Center: <t t-esc="collec_center"/>
+                        </div>
+                        <div style="font-weight:bold;font-size:15px;">
+                            Patient:&#160;<t t-esc="request.website.sale_get_order().partner_id.name"/>&#160;(
+                            <span t-if="gender=='male'">Male</span>
+                            <span t-if="gender=='female'">Female</span>
+                            <span t-if="gender=='others'">Others</span>),
+                            D.O.B: 
+                            <t t-esc="dob" t-options='{"widget": "date" , "format": "d MMM, y"}'/>, 
+                            Blood Group: 
+                            <span t-if="b_g=='a'">A</span>
+                            <span t-if="b_g=='b'">B</span>
+                            <span t-if="b_g=='ab'">AB</span>
+                            <span t-if="b_g=='o'">O</span>                           
+                            <span t-if="rh=='negative'">(-)</span>
+                            <span t-if="rh=='positive'">(+)</span>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="patho_inherit_cart_summary_for_test_date" inherit_id="website_sale.cart_summary" name="Website TestRequests Summary">
+        <xpath expr="//th[hasclass('td-qty')]" position="replace">
+            <t t-set="flag" t-value="0"/>
+            <t t-foreach="website_sale_order.order_line" t-as="line">
+                <t t-if="line.product_id.is_test or line.product_id.is_test_package">
+
+                </t>
+                <t t-else="">
+                    <t t-set="flag" t-value="1"/>
+                </t>
+            </t>
+            <th t-if="flag==1" class="text-center td-qty">Quantity</th>
+            <th t-if="flag==0" class="text-center td-qty"></th>
+        </xpath>
+        <xpath expr="//td[hasclass('td-qty')]" position="replace">
+            <td t-if="line.product_id.is_test or line.product_id.is_test_package" class='td-qty'>
+            </td>
+            <td t-else="" class='td-qty'>
+                <div id="quote_qty">
+                    <span t-field="line.product_uom_qty"/>
+                    <span class='hidden-xs' t-field="line.product_uom" groups="product.group_uom"/>
+                </div>
+            </td>
+        </xpath>
+
+    </template>
+
+    <template id="website_patho_inherit_cart_popover" inherit_id="website_sale.cart_line_product_link" name="Patho Cart Popover">
+        <xpath expr="//a" position="replace">
+            <a t-if="line.product_id.is_test or line.product_id.is_test_package"
+                t-attf-href="/shop/test/#{ slug(line.product_id.product_tmpl_id) }">
+                <t t-raw="0"/>
+            </a>
+            <a t-else="" t-attf-href="/shop/product/#{ slug(line.product_id.product_tmpl_id) }">
+                <t t-raw="0"/>
+            </a>
+        </xpath>
+    </template>
+
+    </data>
+</odoo>

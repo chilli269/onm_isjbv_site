@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_my_to_do_inh">
+        <field name="name">view_my_to_do_inh</field>
+        <field name="inherit_id" ref="to_do_thing.view_my_to_do" />
+        <field name="model">my.todo</field>
+        <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="stage_id"/>
+                </field>
+        </field>
+    </record>
+
+     <record model="ir.ui.view" id="view_my_to_do_form_inh">
+        <field name="name">view_my_to_do_form_inh</field>
+        <field name="inherit_id" ref="to_do_thing.view_my_to_do_form" />
+        <field name="model">my.todo</field>
+        <field name="arch" type="xml">
+                <field name="id" position="replace">
+                    <field name="stage_id"/>
+                </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_my_to_do_stages">
+        <field name="name">view_my_to_do_stages</field>
+        <field name="model">my.todo.stages</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_my_to_do_stages_form">
+        <field name="name">view_my_to_do_stages_form</field>
+        <field name="model">my.todo.stages</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="name"/>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_my_to_do_stages">
+        <field name="name">ToDo Stages</field>
+        <field name="res_model">my.todo.stages</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_my_to_do_iiner_stages"
+              name="ToDo Stages"
+              parent="to_do_thing.menu_my_to_do"
+              action="action_my_to_do"
+              sequence="10"/>
+</odoo>

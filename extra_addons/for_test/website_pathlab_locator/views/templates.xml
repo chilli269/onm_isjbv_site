@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : https://store.webkul.com/license.html/ -->
+<odoo>
+    <template id="inherit_footer_default_for_lab_locator" inherit_id="website_pathology.inherit_footer_default"
+        name="Pathology Lab Locator Footer">
+        <xpath expr="//div[@id='footer']//ul" position="inside">
+            <li>
+                <a class="" href="/lab/locator">
+                <span class="fa fa-map-marker"/> Locate Labs
+                </a>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="patho_lab_locator_page" name="Pathology Lab Locators">
+        <t t-call="website.layout">
+            <div class="oe_structure"></div>
+            <div class="container">
+                <div class="oe_structure"></div>
+                <section class="lab-location mt8">
+                    <div class="row">
+                        <div class="col-md-12 ml0 mr0 mt16">
+                            <div class="card">
+                                <!-- <div class="card-header"> -->
+                                    <h3 class="ml16 mt8 mb8" style="display:flex;">
+                                        <img src="/website_pathlab_locator/static/src/img/path_flask.png" alt=":-("
+                                             style="width:40px;height:40px;" />
+                                        <span style="padding-top:8px;color:#345cc6;" class="ml8">
+                                            <b> Pathology Lab </b>
+                                        </span>
+                                    </h3>
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <!-- <div class=""> -->
+                                <div class="alert alert-info text-center fade in extra-information"
+                                    style="display:none;"></div>
+                                <div class="row ml0 mr0 mt16">
+                                    <div class="col-md-4 col-sm-12 col-12" id="lab-menus">
+                                        <t t-call="website_pathlab_locator.locator_side_menu_panel_view"/>
+                                    </div>
+                                    <div class="col-md-8 col-sm-12 col-12" id="googleMap" style="height:458px;"></div>
+                                </div>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="lab_locator_loader" style="display:none;"></div>
+                        <span id="show-lab-locator" data-show-lab-locator="yes" />
+                        <script type="text/javascript" t-att-src="website.sudo().patho_get_map_api_url()"></script>
+                    </div>
+                </section>
+                <div class="oe_structure"></div>
+            </div>
+        </t>
+    </template>
+
+    <template id="locator_side_menu_panel_view">
+        <div class="panel-body tt">
+            <div class="lab-menu mr16" style="padding:8px;">
+                <div style="display:flex;margin: 2px 4px;">
+                    <div class="input-group">
+                        <input type="text" name="search-input" id="search-input" class="form-control" placeholder="Search Labs.." />
+                        <span class="input-group-btn">
+                          <button class="btn btn-primary search-lab" type="button"><i class="fa fa-search"/></button>
+                        </span>
+                    </div>
+                    <button class="btn btn-primary reset-loc" title="Reset Map"><i class="fa fa-refresh" /></button>
+                </div>
+                <ul class="nav nav-pills nav-stacked"></ul>
+            </div>
+        </div>
+    </template>
+
+
+    <template id="patho_lab_details_page" name="Pathology Lab Details">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container mt32 mb32">
+                    <div class="row ml0 mr0">
+                        <div class="col-md-12 card">
+                            <!-- <div class="card-header"> -->
+                                <h3 class="ml16 mt8 mb8" style="display:flex;">
+                                    <img src="/website_pathlab_locator/static/src/img/path_flask.png" alt=":-("
+                                         style="width:40px;height:40px;" />
+                                    <span style="padding-top:8px;color:#345cc6;" class="ml8">
+                                        <b> <span t-field="lab_obj.name"> Pathology Lab</span></b>
+                                    </span>
+                                </h3>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                    <div class="mt16 ml0 mr0 text-default" t-if="lab_obj.patho_latitude or lab_obj.patho_longitude" >
+                        <h4><b> Lab Location </b></h4>
+                        <div class="mt8">
+                            <iframe
+                                width="100%"
+                                height="200"
+                                frameborder="0" style="border:0"
+                                t-attf-src="https://maps.google.com/maps?key=AIzaSyAZ2JC2JTuX5kibdbVQvaWH4BaNDab1PHk&amp;q=#{lab_obj.street1},#{lab_obj.city},#{lab_obj.state_id.name},#{lab_obj.country_id.name}&amp;output=embed">
+                            </iframe>
+                        </div>
+                    </div>
+                    <div class="mt16 ml0 mr0 mt16">
+                        <h4> <b>Lab Address </b></h4>
+                        <div class="card card-body" style="border-left:5px solid #3a7ac4;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row mb8">
+                                        <div class="patho_detail_txt col-md-12 text-primary">Test Pathology Lab </div>
+                                    </div>
+                                    <div class="row mt8 mb8">
+                                        <div class="patho_detail_txt col-md-3" style="white-space: nowrap;">Phone No. :</div>
+                                        <div class="col-md-8" t-esc="lab_obj.phone"/>
+                                    </div>
+                                    <div class="row mt8 mb8">
+                                        <div class="patho_detail_txt col-md-3" style="white-space: nowrap;">Email Id :</div>
+                                        <div class="col-md-8" t-esc="lab_obj.email"/>
+                                    </div>
+                                    <div class="row mt8 mb8">
+                                        <div class="patho_detail_txt col-md-3" style="white-space: nowrap;">Address :</div>
+                                        <div class="col-md-8" t-esc="lab_obj.contact_address"/>
+                                    </div>
+                                    <div class="row mt8 mb8 col-md-12">
+                                        <div id="demo"/>
+                                        <form action="http://maps.google.com/maps" method="get" target="_blank" name="patho_get_dir_from">
+                                           <input type="hidden" name="saddr" t-att-value="request.website.user_id.partner_id.contact_address or ''"/>
+                                           <input type="hidden" name="daddr" t-att-value="lab_obj.contact_address" />
+                                           <button type="submit" value="Get directions" class="btn btn-md btn-primary" id="patho_get_dir_button" style="font-weight: bold;"> Get Directions </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div t-if="len(lab_obj.patho_lab_timings)" class="col-md-6">
+                                    <t t-set="lab_timing" t-value="lab_obj.patho_lab_timings"/>
+                                    <div class="row mb8 d-none  d-lg-flex d-xl-flex">
+                                        <div class="patho_detail_txt col-md-3" style="white-space: nowrap;">Lab Timing:</div>
+                                        <div class="col-md-8">
+                                            <div class="row ml0 mr0">
+                                                <span class="col-md-4 patho_detail_txt text-primary"> Days </span>
+                                                <span class="col-md-8 patho_detail_txt text-primary"> am &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;pm </span>
+                                            </div>
+                                            <t t-foreach="lab_timing" t-as="day">
+                                                <div class="row ml0 mr0">
+                                                    <span class="col-md-4 text-capitalize "><t t-esc="day.days"/></span>
+                                                    <span class="col-md-8">
+                                                        <t t-if="day.status == 'open'">
+                                                            <span><t t-esc="day.open_time" t-options="{'widget':'float_time'}"/> to </span>
+                                                            <span><t t-esc="day.close_time" t-options="{'widget':'float_time'}"/></span>
+                                                        </t>
+                                                        <t t-if="not day.status == 'open'">
+                                                            <span class="text-danger">Closed</span>
+                                                        </t>
+                                                    </span>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    <div class="row mb8 d-flex d-md-flex d-lg-none">
+                                        <div class="patho_detail_txt col-md-3">Lab Timing:</div>
+                                        <div class="col-md-8">
+                                            <div class="container">
+                                                <span class="col-md-4 patho_detail_txt text-primary" style="padding-left:0px;"> Days </span>
+                                                <span class="col-md-8 patho_detail_txt text-primary"> am &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;pm </span>
+                                            </div>
+                                            <t t-foreach="lab_timing" t-as="day">
+                                                <div class="">
+                                                    <span class="col-md-4 text-capitalize " style="padding:0px;"><t t-esc="day.days"/></span>
+                                                    <span class="col-md-8">
+                                                        <t t-if="day.status == 'open'">
+                                                            <span><t t-esc="day.open_time" t-options="{'widget':'float_time'}"/> to </span>
+                                                            <span><t t-esc="day.close_time" t-options="{'widget':'float_time'}"/></span>
+                                                        </t>
+                                                        <t t-if="not day.status == 'open'">
+                                                            <span class="text-danger">Closed</span>
+                                                        </t>
+                                                    </span>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt16 ml0 mr0 text-default" t-if="len(lab_obj.lab_facility_ids)" >
+                        <h4><b> Facilities </b></h4>
+                        <div class="card" style="border-left:5px solid #3a7ac4;padding:5px;">
+                            <div class="row">
+                                <t t-foreach="lab_obj.lab_facility_ids" t-as="labfacility">
+                                    <div class="lab_facility col-md-2 mt8 mb8 text-center col-4 col-sm-3">
+                                        <img class="well img img-fluid mb4" width="60%" height="60%" style="padding:8px;"
+                                            t-attf-src="/website/image/patho.lab.facility/{{labfacility.id}}/icon" t-att-alt="labfacility.name"/>
+                                        <div style="color:#594d4d;">
+                                            <b><t t-esc="labfacility.name"/></b>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt16 ml0 mr0 text-default" t-if="len(lab_obj.lab_image_ids)">
+                        <h4><b> Lab Gallary </b></h4>
+                        <div class="mt8 row">
+                            <t t-foreach="lab_obj.lab_image_ids" t-as="labimg">
+                                <div class="lab_gallary_img col-md-3 mt8 mb8">
+                                    <img class="img img-fluid" width="100%" height="100%" t-attf-src="/website/image/patho.lab.image/{{labimg.id}}/image" t-att-alt="labimg.name"/>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+
+</odoo>
