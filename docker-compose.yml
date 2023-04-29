@@ -12,8 +12,8 @@ services:
       - PGUSER=odoo
       - PGPASSWORD=odoo
     ports:
-      - "8125:8069"
-      - "8127:8071"
+      - "8130:8069"
+      - "8132:8071"
     volumes:
       - odoo15-classes-web-data:/var/lib/odoo
       - ./config/local_odoo.conf:/etc/odoo/odoo.conf
@@ -27,7 +27,7 @@ services:
       - POSTGRES_USER=odoo
       - POSTGRES_DB=postgres
     ports:
-      - "5491:5432"
+      - "5499:5432"
     volumes:
        - odoo15-classes-db-data:/var/lib/postgresql/data
 volumes:
